@@ -2,6 +2,7 @@ package com.majkic.mirko.mmdb.main;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,13 +18,22 @@ import com.majkic.mirko.mmdb.model.Movie;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 
 public class MainFragment extends Fragment implements MainContract.View {
 
     public static final int COLUMN_COUNT = 3;
+    private static final String TAG = MainFragment.class.getSimpleName();
     private MainContract.UserActionsListener mPresenter;
-    private RecyclerView movieListView;
-    private ProgressBar progress;
+    GridLayoutManager layoutManager;
+    @BindView(R.id.movies_list)
+    RecyclerView movieListView;
+    @BindView(R.id.progress)
+    ProgressBar progress;
+    private Unbinder unbinder;
 
     public MainFragment() {
         // Required empty public constructor
@@ -52,14 +62,22 @@ public class MainFragment extends Fragment implements MainContract.View {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_main, container, false);
+        ButterKnife.bind(this, root);
 
         mPresenter = new MainPresenter(this);
 
-        movieListView = root.findViewById(R.id.movies_list);
-        movieListView.setLayoutManager(new GridLayoutManager(getContext(), COLUMN_COUNT));
+        layoutManager = new GridLayoutManager(getContext(), COLUMN_COUNT);
+        movieListView.setLayoutManager(layoutManager);
         movieListView.setAdapter(new MovieAdapter(getContext(), new ArrayList<Movie>()));
-
-        progress = root.findViewById(R.id.progress);
+        movieListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (layoutManager.findLastVisibleItemPosition() == layoutManager.getItemCount() - 1 && progress.getVisibility() == View.GONE) {
+                    mPresenter.getNextMovies();
+                }
+            }
+        });
 
         return root;
     }
@@ -81,6 +99,12 @@ public class MainFragment extends Fragment implements MainContract.View {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    @Override
     public void showProgress() {
         if (progress != null) {
             progress.setVisibility(View.VISIBLE);
@@ -98,6 +122,13 @@ public class MainFragment extends Fragment implements MainContract.View {
     public void showMovies(List<Movie> movies) {
         if (movieListView.getAdapter() != null) {
             ((MovieAdapter) movieListView.getAdapter()).setMovieList(movies);
+        }
+    }
+
+    @Override
+    public void appendMovies(List<Movie> nextMovies) {
+        if (movieListView.getAdapter() != null) {
+            ((MovieAdapter) movieListView.getAdapter()).appendMovies(nextMovies);
         }
     }
 }

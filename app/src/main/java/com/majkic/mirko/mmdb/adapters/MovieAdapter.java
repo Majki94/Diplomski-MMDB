@@ -16,6 +16,9 @@ import com.majkic.mirko.mmdb.model.Movie;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by hp on 07.04.2019.
  */
@@ -56,15 +59,21 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         notifyDataSetChanged();
     }
 
+    public void appendMovies(List<Movie> nextMovies) {
+        this.movies.addAll(nextMovies);
+        notifyDataSetChanged();
+    }
+
     public static class MovieViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView image;
-        private TextView title;
+        @BindView(R.id.movie_image)
+        ImageView image;
+        @BindView(R.id.movie_title)
+        TextView title;
 
         public MovieViewHolder(@NonNull View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.movie_image);
-            title = itemView.findViewById(R.id.movie_title);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

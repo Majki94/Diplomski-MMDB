@@ -34,7 +34,7 @@ public class MovieDataRepositoryImplementation implements MovieDataRepository {
             @Override
             public void onMoviesGot(List<Movie> movies) {
                 cachedMovies.addAll(movies);
-                callback.onMoviesGot(cachedMovies);
+                callback.onMoviesGot(movies);
                 page++;
             }
         });

@@ -16,9 +16,13 @@ public interface MainContract {
         void hideProgress();
 
         void showMovies(List<Movie> movies);
+
+        void appendMovies(List<Movie> nextMovies);
     }
 
     interface UserActionsListener {
         void getMovies();
+
+        void getNextMovies();
     }
 }

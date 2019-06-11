@@ -31,4 +31,16 @@ public class MainPresenter implements MainContract.UserActionsListener {
             }
         });
     }
+
+    @Override
+    public void getNextMovies() {
+        view.showProgress();
+        repository.getNextMovies(new MovieDataRepository.GetMoviesCallback() {
+            @Override
+            public void onMoviesGot(List<Movie> movies) {
+                view.hideProgress();
+                view.appendMovies(movies);
+            }
+        });
+    }
 }
