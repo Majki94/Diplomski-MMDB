@@ -62,7 +62,7 @@ public class MainFragment extends Fragment implements MainContract.View {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_main, container, false);
-        ButterKnife.bind(this, root);
+        unbinder = ButterKnife.bind(this, root);
 
         mPresenter = new MainPresenter(this);
 
@@ -127,7 +127,7 @@ public class MainFragment extends Fragment implements MainContract.View {
 
     @Override
     public void appendMovies(List<Movie> nextMovies) {
-        if (movieListView.getAdapter() != null) {
+        if (movieListView != null && movieListView.getAdapter() != null) {
             ((MovieAdapter) movieListView.getAdapter()).appendMovies(nextMovies);
         }
     }

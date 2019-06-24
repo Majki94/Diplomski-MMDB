@@ -1,5 +1,8 @@
 package com.majkic.mirko.mmdb.data;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.majkic.mirko.mmdb.model.Movie;
 import com.majkic.mirko.mmdb.retrofit.Communicator;
 
@@ -30,14 +33,24 @@ public class MovieDataRepositoryImplementation implements MovieDataRepository {
 
     @Override
     public void getNextMovies(final GetMoviesCallback callback) {
-        Communicator.getMovies(page, new Communicator.GetMoviesCallback() {
+        new Thread(new Runnable() {
             @Override
-            public void onMoviesGot(List<Movie> movies) {
-                cachedMovies.addAll(movies);
-                callback.onMoviesGot(movies);
-                page++;
+            public void run() {
+                Communicator.getMovies(page, new Communicator.GetMoviesCallback() {
+                    @Override
+                    public void onMoviesGot(final List<Movie> movies) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                cachedMovies.addAll(movies);
+                                callback.onMoviesGot(movies);
+                                page++;
+                            }
+                        });
+                    }
+                });
             }
-        });
+        }).start();
     }
 
     @Override

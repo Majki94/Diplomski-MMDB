@@ -33,7 +33,8 @@ public class BackStack {
         if (fragmentList.size() > 1) {
             //will be implemented
         } else {
-            activityReference.get().onBackPressed();
+            fragmentList.clear();
+            activityReference.get().finish();
         }
     }
 
