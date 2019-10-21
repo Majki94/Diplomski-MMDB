@@ -58,13 +58,12 @@ public class MainFragment extends Fragment implements MainContract.View {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         unbinder = ButterKnife.bind(this, root);
 
-        mPresenter = new MainPresenter(this);
+        mPresenter = new MainPresenter(this, getContext());
 
         layoutManager = new GridLayoutManager(getContext(), COLUMN_COUNT);
         movieListView.setLayoutManager(layoutManager);

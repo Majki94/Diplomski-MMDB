@@ -1,5 +1,7 @@
 package com.majkic.mirko.mmdb.main;
 
+import android.content.Context;
+
 import com.majkic.mirko.mmdb.data.MovieDataRepository;
 import com.majkic.mirko.mmdb.data.MovieDataRepositoryImplementation;
 import com.majkic.mirko.mmdb.model.Movie;
@@ -13,11 +15,13 @@ import java.util.List;
 public class MainPresenter implements MainContract.UserActionsListener {
 
     private MainContract.View view;
+    private Context context;
     private MovieDataRepository repository;
 
-    public MainPresenter(MainContract.View view) {
+    public MainPresenter(MainContract.View view, Context context) {
         this.view = view;
-        repository = MovieDataRepositoryImplementation.getInstance();
+        this.context = context;
+        repository = MovieDataRepositoryImplementation.getInstance(this.context);
     }
 
     @Override

@@ -1,8 +1,10 @@
 package com.majkic.mirko.mmdb.data;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.majkic.mirko.mmdb.database.MoviesDatabase;
 import com.majkic.mirko.mmdb.model.Movie;
 import com.majkic.mirko.mmdb.retrofit.Communicator;
 
@@ -18,17 +20,21 @@ public class MovieDataRepositoryImplementation implements MovieDataRepository {
     private static MovieDataRepositoryImplementation INSTANCE;
     private List<Movie> cachedMovies;
     private int page;
+    private Context context;
+    private MoviesDatabase moviesDb;
 
-    public static MovieDataRepositoryImplementation getInstance() {
+    public static MovieDataRepositoryImplementation getInstance(Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new MovieDataRepositoryImplementation();
+            INSTANCE = new MovieDataRepositoryImplementation(context);
         }
         return INSTANCE;
     }
 
-    private MovieDataRepositoryImplementation() {
+    private MovieDataRepositoryImplementation(Context context) {
         cachedMovies = new ArrayList<>();
         page = 1;
+        this.context = context;
+        moviesDb = MoviesDatabase.getInstance(this.context);
     }
 
     @Override
