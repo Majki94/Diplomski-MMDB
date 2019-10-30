@@ -6,6 +6,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
 import com.majkic.mirko.mmdb.model.Movie;
+import com.majkic.mirko.mmdb.model.dao.MovieDao;
 
 /**
  * Created by hp on 21.10.2019.
@@ -22,5 +23,7 @@ public abstract class MoviesDatabase extends RoomDatabase {
         }
         return instance;
     }
+
+    public abstract MovieDao movieDao();
 
 }

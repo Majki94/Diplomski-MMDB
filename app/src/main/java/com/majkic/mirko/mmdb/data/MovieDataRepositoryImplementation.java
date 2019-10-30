@@ -45,14 +45,20 @@ public class MovieDataRepositoryImplementation implements MovieDataRepository {
                 Communicator.getMovies(page, new Communicator.GetMoviesCallback() {
                     @Override
                     public void onMoviesGot(final List<Movie> movies) {
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                cachedMovies.addAll(movies);
-                                callback.onMoviesGot(movies);
-                                page++;
+                                checkForFavouriteAndWatched(movies);
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        cachedMovies.addAll(movies);
+                                        callback.onMoviesGot(movies);
+                                        page++;
+                                    }
+                                });
                             }
-                        });
+                        }).start();
                     }
                 });
             }
@@ -66,6 +72,42 @@ public class MovieDataRepositoryImplementation implements MovieDataRepository {
         } else {
             getNextMovies(callback);
         }
+    }
+
+    @Override
+    public void saveMovie(final Movie movie) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<Movie> savedMovies = moviesDb.movieDao().getAll();
+                if (isMovieInProvidedList(movie, savedMovies)) {
+                    moviesDb.movieDao().update(movie);
+                } else {
+                    moviesDb.movieDao().insert(movie);
+                }
+            }
+        }).start();
+    }
+
+    private void checkForFavouriteAndWatched(List<Movie> movies) {
+        List<Movie> savedMovies = moviesDb.movieDao().getAll();
+        for (Movie movie : movies) {
+            for (Movie saved : savedMovies) {
+                if (saved.getId() == movie.getId()) {
+                    movie.setFavorite(saved.isFavorite());
+                    movie.setWatched(saved.isWatched());
+                }
+            }
+        }
+    }
+
+    private boolean isMovieInProvidedList(Movie m, List<Movie> providedList) {
+        for (Movie p : providedList) {
+            if (p.getId() == m.getId()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

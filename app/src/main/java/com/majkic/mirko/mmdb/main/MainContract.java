@@ -24,5 +24,9 @@ public interface MainContract {
         void getMovies();
 
         void getNextMovies();
+
+        void favouriteChanged(Movie movie);
+
+        void watchedChanged(Movie movie);
     }
 }

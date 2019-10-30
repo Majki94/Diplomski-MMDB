@@ -47,4 +47,14 @@ public class MainPresenter implements MainContract.UserActionsListener {
             }
         });
     }
+
+    @Override
+    public void favouriteChanged(Movie movie) {
+        repository.saveMovie(movie);
+    }
+
+    @Override
+    public void watchedChanged(Movie movie) {
+        repository.saveMovie(movie);
+    }
 }

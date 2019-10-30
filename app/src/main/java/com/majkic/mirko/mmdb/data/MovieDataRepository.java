@@ -14,6 +14,8 @@ public interface MovieDataRepository {
 
     void getCachedMovies(GetMoviesCallback callback);
 
+    void saveMovie(Movie movie);
+
     interface GetMoviesCallback {
         void onMoviesGot(List<Movie> movies);
     }

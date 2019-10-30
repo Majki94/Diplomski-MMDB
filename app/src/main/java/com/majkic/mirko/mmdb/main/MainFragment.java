@@ -67,7 +67,17 @@ public class MainFragment extends Fragment implements MainContract.View {
 
         layoutManager = new GridLayoutManager(getContext(), COLUMN_COUNT);
         movieListView.setLayoutManager(layoutManager);
-        movieListView.setAdapter(new MovieAdapter(getContext(), new ArrayList<Movie>()));
+        movieListView.setAdapter(new MovieAdapter(getContext(), new ArrayList<Movie>(), new MovieAdapter.MovieClickListener() {
+            @Override
+            public void onFavouriteClicked(Movie m) {
+                mPresenter.favouriteChanged(m);
+            }
+
+            @Override
+            public void onWatchedClicked(Movie m) {
+                mPresenter.watchedChanged(m);
+            }
+        }));
         movieListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
