@@ -2,7 +2,6 @@ package com.majkic.mirko.mmdb.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.majkic.mirko.mmdb.Constants;
 import com.majkic.mirko.mmdb.R;
+import com.majkic.mirko.mmdb.Utilities;
 import com.majkic.mirko.mmdb.model.Movie;
 
 import java.util.List;
@@ -50,25 +50,33 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         final Movie m = movies.get(i);
         holder.title.setText(m.getTitle());
         Glide.with(context).load(Constants.BACKEND.TMDB_POSTER_BASE_URL + m.getPosterPath()).into(holder.image);
-        setFavoriteOrWatched(holder.favourite, m.isFavorite());
+        Utilities.setFavoriteOrWatched(context, holder.favourite, m.isFavorite());
         holder.favourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 m.setFavorite(!m.isFavorite());
-                setFavoriteOrWatched(((ImageView) v), m.isFavorite());
+                Utilities.setFavoriteOrWatched(context, ((ImageView) v), m.isFavorite());
                 if (listener != null) {
                     listener.onFavouriteClicked(m);
                 }
             }
         });
-        setFavoriteOrWatched(holder.watched, m.isWatched());
+        Utilities.setFavoriteOrWatched(context, holder.watched, m.isWatched());
         holder.watched.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 m.setWatched(!m.isWatched());
-                setFavoriteOrWatched(((ImageView) v), m.isWatched());
+                Utilities.setFavoriteOrWatched(context, ((ImageView) v), m.isWatched());
                 if (listener != null) {
                     listener.onWatchedClicked(m);
+                }
+            }
+        });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null){
+                    listener.onMovieClicked(m);
                 }
             }
         });
@@ -89,14 +97,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         notifyDataSetChanged();
     }
 
-    private void setFavoriteOrWatched(ImageView imageView, boolean favouriteOrWatched) {
-        if (favouriteOrWatched) {
-            imageView.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent));
-        } else {
-            imageView.clearColorFilter();
-        }
-    }
-
     public static class MovieViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.movie_image)
@@ -115,6 +115,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     }
 
     public interface MovieClickListener {
+        void onMovieClicked(Movie m);
+
         void onFavouriteClicked(Movie m);
 
         void onWatchedClicked(Movie m);
