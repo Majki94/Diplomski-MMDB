@@ -2,39 +2,26 @@ package com.majkic.mirko.mmdb.main;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
-import com.majkic.mirko.mmdb.BackStack;
 import com.majkic.mirko.mmdb.R;
-import com.majkic.mirko.mmdb.adapters.MovieAdapter;
-import com.majkic.mirko.mmdb.model.Movie;
-import com.majkic.mirko.mmdb.movie_details.MovieDetailsFragment;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+public class MainFragment extends Fragment {
 
-public class MainFragment extends Fragment implements MainContract.View {
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
 
-    public static final int COLUMN_COUNT = 3;
-    private static final String TAG = MainFragment.class.getSimpleName();
-    private MainContract.UserActionsListener mPresenter;
-    GridLayoutManager layoutManager;
-    @BindView(R.id.movies_list)
-    RecyclerView movieListView;
-    @BindView(R.id.progress)
-    ProgressBar progress;
     private Unbinder unbinder;
 
     public MainFragment() {
@@ -60,48 +47,13 @@ public class MainFragment extends Fragment implements MainContract.View {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         unbinder = ButterKnife.bind(this, root);
 
-        mPresenter = new MainPresenter(this, getContext());
-
-        layoutManager = new GridLayoutManager(getContext(), COLUMN_COUNT);
-        movieListView.setLayoutManager(layoutManager);
-        movieListView.setAdapter(new MovieAdapter(getContext(), new ArrayList<Movie>(), new MovieAdapter.MovieClickListener() {
-            @Override
-            public void onMovieClicked(Movie m) {
-                BackStack.presentFragment(MovieDetailsFragment.newInstance(m.getId()));
-            }
-
-            @Override
-            public void onFavouriteClicked(Movie m) {
-                mPresenter.favouriteChanged(m);
-            }
-
-            @Override
-            public void onWatchedClicked(Movie m) {
-                mPresenter.watchedChanged(m);
-            }
-        }));
-        movieListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (layoutManager.findLastVisibleItemPosition() == layoutManager.getItemCount() - 1 && progress.getVisibility() == View.GONE) {
-                    mPresenter.getNextMovies();
-                }
-            }
-        });
-
         return root;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.getMovies();
     }
 
     @Override
@@ -114,37 +66,4 @@ public class MainFragment extends Fragment implements MainContract.View {
         super.onDetach();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    @Override
-    public void showProgress() {
-        if (progress != null) {
-            progress.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void hideProgress() {
-        if (progress != null) {
-            progress.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void showMovies(List<Movie> movies) {
-        if (movieListView.getAdapter() != null) {
-            ((MovieAdapter) movieListView.getAdapter()).setMovieList(movies);
-        }
-    }
-
-    @Override
-    public void appendMovies(List<Movie> nextMovies) {
-        if (movieListView != null && movieListView.getAdapter() != null) {
-            ((MovieAdapter) movieListView.getAdapter()).appendMovies(nextMovies);
-        }
-    }
 }
