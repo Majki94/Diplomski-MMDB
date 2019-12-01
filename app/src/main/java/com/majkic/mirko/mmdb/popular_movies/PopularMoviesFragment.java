@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,6 +101,7 @@ public class PopularMoviesFragment extends Fragment implements PopularMoviesCont
 
     @Override
     public void onResume() {
+        Log.e(TAG, "onResume: called");
         super.onResume();
         mPresenter.getMovies();
     }

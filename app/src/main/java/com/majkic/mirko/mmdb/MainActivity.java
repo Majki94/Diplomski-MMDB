@@ -3,7 +3,7 @@ package com.majkic.mirko.mmdb;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.majkic.mirko.mmdb.popular_movies.PopularMoviesFragment;
+import com.majkic.mirko.mmdb.main.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         BackStack.setActivityReference(this);
-        BackStack.presentFragment(PopularMoviesFragment.newInstance());
+        BackStack.presentFragment(MainFragment.newInstance());
 
     }
 

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.majkic.mirko.mmdb.R;
+import com.majkic.mirko.mmdb.adapters.MainPagerAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,6 +24,7 @@ public class MainFragment extends Fragment {
     ViewPager viewPager;
 
     private Unbinder unbinder;
+    private MainPagerAdapter adapter;
 
     public MainFragment() {
         // Required empty public constructor
@@ -53,6 +55,33 @@ public class MainFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         unbinder = ButterKnife.bind(this, root);
 
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.popular));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.favourite));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.watched));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        if (adapter == null) {
+            adapter = new MainPagerAdapter(getFragmentManager());
+        }
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        viewPager.setAdapter(adapter);
+
         return root;
     }
 
@@ -66,4 +95,9 @@ public class MainFragment extends Fragment {
         super.onDetach();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }
