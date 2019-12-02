@@ -31,6 +31,7 @@ public class BackStack {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.anim_slide_in, R.anim.anim_slide_out);
         fragmentTransaction.replace(R.id.content_frame, fragment);
+        fragmentTransaction.addToBackStack(null); //jako bitno da ne pukne po povratku sa DetailsFragment na Main
         fragmentTransaction.commit();
         if (add) {
             fragmentList.add(fragment);

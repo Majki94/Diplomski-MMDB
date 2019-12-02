@@ -3,6 +3,7 @@ package com.majkic.mirko.mmdb.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 import com.majkic.mirko.mmdb.popular_movies.PopularMoviesFragment;
 
@@ -13,6 +14,7 @@ import com.majkic.mirko.mmdb.popular_movies.PopularMoviesFragment;
 public class MainPagerAdapter extends FragmentStatePagerAdapter {
 
     private static final int TABS_COUNT = 3;
+    private static final String TAG = MainPagerAdapter.class.getSimpleName();
     private PopularMoviesFragment popular;
     private PopularMoviesFragment favourite;
     private PopularMoviesFragment watched;
@@ -26,6 +28,7 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
+        Log.e(TAG, "getItem: called, position : " + i);
         switch (i) {
             case 0:
                 return popular;

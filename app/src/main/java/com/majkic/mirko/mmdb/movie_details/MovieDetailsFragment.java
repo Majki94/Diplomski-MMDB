@@ -2,6 +2,7 @@ package com.majkic.mirko.mmdb.movie_details;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +55,12 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         args.putInt(ARG_MOVIE_ID, movieId);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override

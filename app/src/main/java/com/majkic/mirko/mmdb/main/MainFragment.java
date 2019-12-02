@@ -2,9 +2,11 @@ package com.majkic.mirko.mmdb.main;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import butterknife.Unbinder;
 
 public class MainFragment extends Fragment {
 
+    private static final String TAG = MainFragment.class.getSimpleName();
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
     @BindView(R.id.view_pager)
@@ -40,8 +43,15 @@ public class MainFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e(TAG, "onCreate: called");
 //        if (getArguments() != null) {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
@@ -52,6 +62,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Log.e(TAG, "onCreateView: called");
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         unbinder = ButterKnife.bind(this, root);
 
@@ -77,12 +88,21 @@ public class MainFragment extends Fragment {
         });
 
         if (adapter == null) {
-            adapter = new MainPagerAdapter(getFragmentManager());
+            Log.e(TAG, "onCreateView: adapter null");
+            adapter = new MainPagerAdapter(getChildFragmentManager());
+        } else {
+            Log.e(TAG, "onCreateView: adapter not null");
         }
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         viewPager.setAdapter(adapter);
 
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e(TAG, "onResume: called");
     }
 
     @Override
