@@ -89,6 +89,50 @@ public class MovieDataRepositoryImplementation implements MovieDataRepository {
         }).start();
     }
 
+    @Override
+    public void getFavouriteMovies(final GetMoviesCallback callback) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<Movie> movies = moviesDb.movieDao().getAll();
+                final List<Movie> retVal = new ArrayList<>();
+                for (Movie m : movies) {
+                    if (m.isFavorite()) {
+                        retVal.add(m);
+                    }
+                }
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onMoviesGot(retVal);
+                    }
+                });
+            }
+        }).start();
+    }
+
+    @Override
+    public void getWatchedMovies(final GetMoviesCallback callback) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<Movie> movies = moviesDb.movieDao().getAll();
+                final List<Movie> retVal = new ArrayList<>();
+                for (Movie m : movies) {
+                    if (m.isWatched()) {
+                        retVal.add(m);
+                    }
+                }
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onMoviesGot(retVal);
+                    }
+                });
+            }
+        }).start();
+    }
+
     private void checkForFavouriteAndWatched(List<Movie> movies) {
         List<Movie> savedMovies = moviesDb.movieDao().getAll();
         for (Movie movie : movies) {

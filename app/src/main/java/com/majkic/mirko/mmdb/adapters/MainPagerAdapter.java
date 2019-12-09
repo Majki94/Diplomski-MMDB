@@ -5,7 +5,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
+import com.majkic.mirko.mmdb.favourite_movies.FavouriteMoviesFragment;
 import com.majkic.mirko.mmdb.popular_movies.PopularMoviesFragment;
+import com.majkic.mirko.mmdb.watched_movies.WatchedMoviesFragment;
 
 /**
  * Created by hp on 01.12.2019.
@@ -16,14 +18,14 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
     private static final int TABS_COUNT = 3;
     private static final String TAG = MainPagerAdapter.class.getSimpleName();
     private PopularMoviesFragment popular;
-    private PopularMoviesFragment favourite;
-    private PopularMoviesFragment watched;
+    private FavouriteMoviesFragment favourite;
+    private WatchedMoviesFragment watched;
 
     public MainPagerAdapter(FragmentManager fm) {
         super(fm);
         popular = PopularMoviesFragment.newInstance();
-        favourite = PopularMoviesFragment.newInstance();
-        watched = PopularMoviesFragment.newInstance();
+        favourite = FavouriteMoviesFragment.newInstance();
+        watched = WatchedMoviesFragment.newInstance();
     }
 
     @Override
@@ -50,11 +52,11 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
         return popular;
     }
 
-    public PopularMoviesFragment getFavourite() {
+    public FavouriteMoviesFragment getFavourite() {
         return favourite;
     }
 
-    public PopularMoviesFragment getWatched() {
+    public WatchedMoviesFragment getWatched() {
         return watched;
     }
 }

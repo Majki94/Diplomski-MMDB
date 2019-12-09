@@ -29,4 +29,6 @@ public interface PopularMoviesContract {
 
         void watchedChanged(Movie movie);
     }
+
+
 }

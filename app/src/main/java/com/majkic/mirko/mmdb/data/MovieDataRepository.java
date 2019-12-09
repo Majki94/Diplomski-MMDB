@@ -16,6 +16,10 @@ public interface MovieDataRepository {
 
     void saveMovie(Movie movie);
 
+    void getFavouriteMovies(GetMoviesCallback callback);
+
+    void getWatchedMovies(GetMoviesCallback callback);
+
     interface GetMoviesCallback {
         void onMoviesGot(List<Movie> movies);
     }

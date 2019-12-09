@@ -6,6 +6,10 @@ package com.majkic.mirko.mmdb;
 
 public class Constants {
 
+    public interface DEFAULTS {
+        int COLUMN_COUNT = 3;
+    }
+
     public interface BACKEND {
         String TMDB_BASE_URL = "https://api.themoviedb.org/3/";
         String TMDB_POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
