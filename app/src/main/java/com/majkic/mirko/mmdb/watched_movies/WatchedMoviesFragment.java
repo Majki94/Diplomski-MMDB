@@ -24,7 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class WatchedMoviesFragment extends Fragment implements WatchedMoviesContract.View{
+public class WatchedMoviesFragment extends Fragment implements WatchedMoviesContract.View {
 
     private Unbinder unbinder;
     private WatchedMoviesContract.UserActionsListener mPresenter;
@@ -70,12 +70,12 @@ public class WatchedMoviesFragment extends Fragment implements WatchedMoviesCont
 
             @Override
             public void onFavouriteClicked(Movie m) {
-
+                mPresenter.favouriteChanged(m);
             }
 
             @Override
             public void onWatchedClicked(Movie m) {
-
+                mPresenter.watchedChanged(m);
             }
         }));
 
@@ -123,5 +123,9 @@ public class WatchedMoviesFragment extends Fragment implements WatchedMoviesCont
         if (movieListView != null && movieListView.getAdapter() != null) {
             ((MovieAdapter) movieListView.getAdapter()).setMovieList(movies);
         }
+    }
+
+    public void refresh(){
+        mPresenter.getWatchedMovies();
     }
 }

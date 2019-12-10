@@ -35,4 +35,26 @@ public class FavouriteMoviesPresenter implements FavouriteMoviesContract.UserAct
             }
         });
     }
+
+    @Override
+    public void favouriteChanged(Movie movie) {
+        view.showProgress();
+        repository.saveMovie(movie, new MovieDataRepository.SaveMovieCallback() {
+            @Override
+            public void onMovieSaved() {
+                view.hideProgress();
+            }
+        });
+    }
+
+    @Override
+    public void watchedChanged(Movie movie) {
+        view.showProgress();
+        repository.saveMovie(movie, new MovieDataRepository.SaveMovieCallback() {
+            @Override
+            public void onMovieSaved() {
+                view.hideProgress();
+            }
+        });
+    }
 }

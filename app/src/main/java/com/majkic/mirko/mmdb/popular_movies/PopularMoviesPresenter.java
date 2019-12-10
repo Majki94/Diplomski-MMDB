@@ -50,11 +50,35 @@ public class PopularMoviesPresenter implements PopularMoviesContract.UserActions
 
     @Override
     public void favouriteChanged(Movie movie) {
-        repository.saveMovie(movie);
+        view.showProgress();
+        repository.saveMovie(movie, new MovieDataRepository.SaveMovieCallback() {
+            @Override
+            public void onMovieSaved() {
+                view.hideProgress();
+            }
+        });
     }
 
     @Override
     public void watchedChanged(Movie movie) {
-        repository.saveMovie(movie);
+        view.showProgress();
+        repository.saveMovie(movie, new MovieDataRepository.SaveMovieCallback() {
+            @Override
+            public void onMovieSaved() {
+                view.hideProgress();
+            }
+        });
+    }
+
+    @Override
+    public void syncFavouriteAndWatched() {
+        view.hideProgress();
+        repository.syncCachedAndSaved(new MovieDataRepository.SyncCallback() {
+            @Override
+            public void onSynced() {
+                view.hideProgress();
+                getMovies();
+            }
+        });
     }
 }

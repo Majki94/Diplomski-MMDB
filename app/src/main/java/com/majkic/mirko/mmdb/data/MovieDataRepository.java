@@ -14,14 +14,24 @@ public interface MovieDataRepository {
 
     void getCachedMovies(GetMoviesCallback callback);
 
-    void saveMovie(Movie movie);
+    void saveMovie(Movie movie, SaveMovieCallback callback);
 
     void getFavouriteMovies(GetMoviesCallback callback);
 
     void getWatchedMovies(GetMoviesCallback callback);
 
+    void syncCachedAndSaved(SyncCallback callback);
+
     interface GetMoviesCallback {
         void onMoviesGot(List<Movie> movies);
+    }
+
+    interface SaveMovieCallback {
+        void onMovieSaved();
+    }
+
+    interface SyncCallback{
+        void onSynced();
     }
 
 }

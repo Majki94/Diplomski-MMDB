@@ -74,6 +74,9 @@ public class MainFragment extends Fragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                if (viewPager != null && viewPager.getAdapter() != null && viewPager.getAdapter() instanceof MainPagerAdapter) {
+                    ((MainPagerAdapter) viewPager.getAdapter()).refresh(tab.getPosition());
+                }
             }
 
             @Override

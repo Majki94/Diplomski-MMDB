@@ -71,12 +71,12 @@ public class FavouriteMoviesFragment extends Fragment implements FavouriteMovies
 
             @Override
             public void onFavouriteClicked(Movie m) {
-
+                mPresenter.favouriteChanged(m);
             }
 
             @Override
             public void onWatchedClicked(Movie m) {
-
+                mPresenter.watchedChanged(m);
             }
         }));
 
@@ -86,7 +86,7 @@ public class FavouriteMoviesFragment extends Fragment implements FavouriteMovies
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.getFavouriteMovies();
+        refresh();
     }
 
     @Override
@@ -125,4 +125,9 @@ public class FavouriteMoviesFragment extends Fragment implements FavouriteMovies
             ((MovieAdapter) movieListView.getAdapter()).setMovieList(movies);
         }
     }
+
+    public void refresh(){
+        mPresenter.getFavouriteMovies();
+    }
+
 }

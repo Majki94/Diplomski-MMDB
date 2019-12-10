@@ -156,4 +156,9 @@ public class PopularMoviesFragment extends Fragment implements PopularMoviesCont
             ((MovieAdapter) movieListView.getAdapter()).appendMovies(nextMovies);
         }
     }
+
+    public void refresh(){
+        mPresenter.syncFavouriteAndWatched();
+    }
+
 }

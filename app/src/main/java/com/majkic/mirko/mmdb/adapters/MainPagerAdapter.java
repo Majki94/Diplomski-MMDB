@@ -59,4 +59,25 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
     public WatchedMoviesFragment getWatched() {
         return watched;
     }
+
+    public void refresh(int position) {
+        Log.e(TAG, "refresh: position : " + position);
+        switch (position) {
+            case 0:
+                if (popular != null) {
+                    popular.refresh();
+                }
+                break;
+            case 1:
+                if (favourite != null) {
+                    favourite.refresh();
+                }
+                break;
+            case 2:
+                if (watched != null) {
+                    watched.refresh();
+                }
+                break;
+        }
+    }
 }

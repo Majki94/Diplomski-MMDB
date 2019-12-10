@@ -28,6 +28,8 @@ public interface PopularMoviesContract {
         void favouriteChanged(Movie movie);
 
         void watchedChanged(Movie movie);
+
+        void syncFavouriteAndWatched();
     }
 
 

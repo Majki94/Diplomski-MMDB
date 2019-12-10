@@ -20,6 +20,10 @@ public interface FavouriteMoviesContract {
 
     interface UserActionsListener {
         void getFavouriteMovies();
+
+        void favouriteChanged(Movie movie);
+
+        void watchedChanged(Movie movie);
     }
 
 }

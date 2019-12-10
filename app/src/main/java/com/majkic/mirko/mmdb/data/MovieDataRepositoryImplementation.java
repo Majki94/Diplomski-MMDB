@@ -75,7 +75,7 @@ public class MovieDataRepositoryImplementation implements MovieDataRepository {
     }
 
     @Override
-    public void saveMovie(final Movie movie) {
+    public void saveMovie(final Movie movie, final SaveMovieCallback callback) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -85,6 +85,12 @@ public class MovieDataRepositoryImplementation implements MovieDataRepository {
                 } else {
                     moviesDb.movieDao().insert(movie);
                 }
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onMovieSaved();
+                    }
+                });
             }
         }).start();
     }
@@ -127,6 +133,22 @@ public class MovieDataRepositoryImplementation implements MovieDataRepository {
                     @Override
                     public void run() {
                         callback.onMoviesGot(retVal);
+                    }
+                });
+            }
+        }).start();
+    }
+
+    @Override
+    public void syncCachedAndSaved(final SyncCallback callback) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                checkForFavouriteAndWatched(cachedMovies);
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onSynced();
                     }
                 });
             }
