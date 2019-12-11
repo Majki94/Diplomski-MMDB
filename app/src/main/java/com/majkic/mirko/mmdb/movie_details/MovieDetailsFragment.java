@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.majkic.mirko.mmdb.Constants;
@@ -19,6 +20,7 @@ import com.majkic.mirko.mmdb.model.Movie;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class MovieDetailsFragment extends Fragment implements MovieDetailsContract.View {
@@ -44,6 +46,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     ProgressBar progressBar;
 
     private MovieDetailsContract.UserActionsListener mPresenter;
+    private Movie movie;
 
     public MovieDetailsFragment() {
         // Required empty public constructor
@@ -121,13 +124,14 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
 
     @Override
     public void showMovie(Movie movie) {
+        this.movie = movie;
         if (poster != null) {
             Glide.with(this).load(Constants.BACKEND.TMDB_POSTER_BASE_URL + movie.getPosterPath()).into(poster);
         }
-        if (favourite != null) {
+        if (favourite != null && getContext() != null) {
             Utilities.setFavoriteOrWatched(getContext(), favourite, movie.isFavorite());
         }
-        if (watched != null) {
+        if (watched != null && getContext() != null) {
             Utilities.setFavoriteOrWatched(getContext(), watched, movie.isWatched());
         }
         if (title != null) {
@@ -140,6 +144,31 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         }
         if (overview != null) {
             overview.setText(movie.getOverview());
+        }
+    }
+
+    @Override
+    public void showUnableToRetrieveInfo() {
+        if (getContext() != null) {
+            Toast.makeText(getContext(), "Unable to retrieve movie info", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @OnClick(R.id.favourite)
+    public void favouriteClicked() {
+        if (movie != null && favourite != null && getContext() != null) {
+            movie.setFavorite(!movie.isFavorite());
+            Utilities.setFavoriteOrWatched(getContext(), favourite, movie.isFavorite());
+            mPresenter.favouriteChanged(movie);
+        }
+    }
+
+    @OnClick(R.id.watched)
+    public void watchedClicked() {
+        if (movie != null && watched != null && getContext() != null) {
+            movie.setWatched(!movie.isWatched());
+            Utilities.setFavoriteOrWatched(getContext(), watched, movie.isWatched());
+            mPresenter.watchedChanged(movie);
         }
     }
 }

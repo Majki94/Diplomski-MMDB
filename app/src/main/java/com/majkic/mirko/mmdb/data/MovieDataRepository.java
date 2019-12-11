@@ -22,6 +22,8 @@ public interface MovieDataRepository {
 
     void syncCachedAndSaved(SyncCallback callback);
 
+    void getMovieFromDatabaseForID(int id, MovieFromDatabaseCallback callback);
+
     interface GetMoviesCallback {
         void onMoviesGot(List<Movie> movies);
     }
@@ -32,6 +34,10 @@ public interface MovieDataRepository {
 
     interface SyncCallback{
         void onSynced();
+    }
+
+    interface MovieFromDatabaseCallback{
+        void onMovieGot(Movie m);
     }
 
 }

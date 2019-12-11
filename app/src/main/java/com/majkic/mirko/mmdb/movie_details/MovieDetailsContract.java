@@ -14,10 +14,16 @@ public interface MovieDetailsContract {
         void hideProgress();
 
         void showMovie(Movie movie);
+
+        void showUnableToRetrieveInfo();
     }
 
     interface UserActionsListener {
         void getMovieForID(int id);
+
+        void favouriteChanged(Movie movie);
+
+        void watchedChanged(Movie movie);
     }
 
 }

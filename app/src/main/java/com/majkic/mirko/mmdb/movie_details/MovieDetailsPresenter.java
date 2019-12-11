@@ -30,13 +30,51 @@ public class MovieDetailsPresenter implements MovieDetailsContract.UserActionsLi
         repository.getCachedMovies(new MovieDataRepository.GetMoviesCallback() {
             @Override
             public void onMoviesGot(List<Movie> movies) {
+                Movie retMovie = null;
                 for (Movie m : movies) {
                     if (m.getId() == id) {
-                        view.hideProgress();
-                        view.showMovie(m);
-                        return;
+                        retMovie = m;
+                        break;
                     }
                 }
+                if (retMovie == null) {
+                    repository.getMovieFromDatabaseForID(id, new MovieDataRepository.MovieFromDatabaseCallback() {
+                        @Override
+                        public void onMovieGot(Movie m) {
+                            if (m != null){
+                                view.hideProgress();
+                                view.showMovie(m);
+                            } else {
+
+                            }
+                        }
+                    });
+                } else {
+                    view.hideProgress();
+                    view.showMovie(retMovie);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void favouriteChanged(Movie movie) {
+        view.showProgress();
+        repository.saveMovie(movie, new MovieDataRepository.SaveMovieCallback() {
+            @Override
+            public void onMovieSaved() {
+                view.hideProgress();
+            }
+        });
+    }
+
+    @Override
+    public void watchedChanged(Movie movie) {
+        view.showProgress();
+        repository.saveMovie(movie, new MovieDataRepository.SaveMovieCallback() {
+            @Override
+            public void onMovieSaved() {
+                view.hideProgress();
             }
         });
     }
