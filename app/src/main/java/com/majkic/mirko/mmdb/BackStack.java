@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import com.majkic.mirko.mmdb.main.MainFragment;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +41,12 @@ public class BackStack {
     }
 
     public static void onBackPressed() {
-        if (fragmentList.size() > 1) {
-            fragmentList.remove(fragmentList.size() - 1);
-            presentFragment(fragmentList.get(fragmentList.size() - 1), false);
-        } else {
+        if (fragmentList.size() <= 1 || fragmentList.get(fragmentList.size() - 1) instanceof MainFragment) {
             fragmentList.clear();
             activityReference.get().finish();
+        } else {
+            fragmentList.remove(fragmentList.size() - 1);
+            presentFragment(fragmentList.get(fragmentList.size() - 1), false);
         }
     }
 
