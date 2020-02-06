@@ -41,12 +41,36 @@ public class BackStack {
     }
 
     public static void onBackPressed() {
+        if (fragmentList == null) {
+            return;
+        }
         if (fragmentList.size() <= 1 || fragmentList.get(fragmentList.size() - 1) instanceof MainFragment) {
             fragmentList.clear();
             activityReference.get().finish();
+            return;
         } else {
             fragmentList.remove(fragmentList.size() - 1);
             presentFragment(fragmentList.get(fragmentList.size() - 1), false);
+        }
+        if (fragmentList.get(fragmentList.size() - 1) instanceof MainFragment) {
+            activityReference.get().setSelection(MainActivity.MOVIES_SELECTED);
+        }
+    }
+
+    public static void clearToHome() {
+        if (fragmentList != null && fragmentList.size() > 1) {
+            Fragment home = fragmentList.get(0);
+            fragmentList.clear();
+            fragmentList.add(home);
+        }
+    }
+
+    public static void clearToHomeAndPresent() {
+        if (fragmentList != null && fragmentList.size() > 1) {
+            Fragment home = fragmentList.get(0);
+            fragmentList.clear();
+            fragmentList.add(home);
+            presentFragment(fragmentList.get(0));
         }
     }
 

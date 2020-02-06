@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.majkic.mirko.mmdb.main.MainFragment;
+import com.majkic.mirko.mmdb.people.PeopleFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,9 +17,9 @@ import butterknife.Unbinder;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final int NONE_SELECTED = -1;
-    private static final int MOVIES_SELECTED = 0;
-    private static final int PEOPLE_SELECTED = 1;
+    public static final int NONE_SELECTED = -1;
+    public static final int MOVIES_SELECTED = 0;
+    public static final int PEOPLE_SELECTED = 1;
 
     @BindView(R.id.movies_button)
     LinearLayout moviesButton;
@@ -34,12 +35,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         unbinder = ButterKnife.bind(this);
 
+        BackStack.setActivityReference(this);
+
         if (selection == NONE_SELECTED || selection == MOVIES_SELECTED) {
-            BackStack.setActivityReference(this);
             BackStack.presentFragment(MainFragment.newInstance());
             setSelection(MOVIES_SELECTED);
         } else {
-            //TODO implement People fragment showing
+            BackStack.presentFragment(PeopleFragment.newInstance());
+            setSelection(PEOPLE_SELECTED);
         }
 
         moviesButton.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (selection != MOVIES_SELECTED) {
                     setSelection(MOVIES_SELECTED);
-                    BackStack.presentFragment(MainFragment.newInstance());
+                    BackStack.clearToHomeAndPresent();
                 }
             }
         });
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (selection != PEOPLE_SELECTED) {
                     setSelection(PEOPLE_SELECTED);
-                    //TODO implement People fragment showing
+                    BackStack.presentFragment(PeopleFragment.newInstance());
                 }
             }
         });
@@ -69,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         BackStack.onBackPressed();
     }
 
-    private void setSelection(int selection) {
+    public void setSelection(int selection) {
         this.selection = selection;
         moviesButton.setBackgroundColor(Color.TRANSPARENT);
         peopleButton.setBackgroundColor(Color.TRANSPARENT);
