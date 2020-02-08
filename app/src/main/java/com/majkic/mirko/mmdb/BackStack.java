@@ -53,7 +53,10 @@ public class BackStack {
             presentFragment(fragmentList.get(fragmentList.size() - 1), false);
         }
         if (fragmentList.get(fragmentList.size() - 1) instanceof MainFragment) {
-            activityReference.get().setSelection(MainActivity.MOVIES_SELECTED);
+            MainActivity activity = activityReference.get();
+            if (activity != null) {
+                activity.setSelection(MainActivity.MOVIES_SELECTED);
+            }
         }
     }
 
