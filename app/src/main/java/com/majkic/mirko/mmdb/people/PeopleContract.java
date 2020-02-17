@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface PeopleContract {
 
-    interface View{
+    interface View {
         void showProgress();
 
         void hideProgress();
@@ -18,7 +18,7 @@ public interface PeopleContract {
         void showPeople(List<Person> people);
     }
 
-    interface UserActionsListener{
+    interface UserActionsListener {
         void getPeople();
     }
 
