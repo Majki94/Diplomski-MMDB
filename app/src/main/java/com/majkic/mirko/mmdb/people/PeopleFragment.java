@@ -3,6 +3,7 @@ package com.majkic.mirko.mmdb.people;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,11 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class PeopleFragment extends Fragment implements PeopleContract.View{
+public class PeopleFragment extends Fragment implements PeopleContract.View {
 
+    private static final String TAG = PeopleFragment.class.getSimpleName();
     private Unbinder unbinder;
+    private PeopleContract.UserActionsListener mPresenter;
 
     public PeopleFragment() {
         // Required empty public constructor
@@ -48,7 +51,15 @@ public class PeopleFragment extends Fragment implements PeopleContract.View{
         View root = inflater.inflate(R.layout.fragment_people, container, false);
         unbinder = ButterKnife.bind(this, root);
 
+        mPresenter = new PeoplePresenter(this);
+
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.getPeople();
     }
 
     @Override
@@ -79,7 +90,10 @@ public class PeopleFragment extends Fragment implements PeopleContract.View{
 
     @Override
     public void showPeople(List<Person> people) {
-
+        for (Person p : people) {
+            Log.e(TAG, "showPeople: " + p.getName());
+            //TODO remove this and add real presentation for people
+        }
     }
 
 }
