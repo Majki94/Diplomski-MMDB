@@ -10,10 +10,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.majkic.mirko.mmdb.Constants;
 import com.majkic.mirko.mmdb.R;
 import com.majkic.mirko.mmdb.model.Person;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class PeopleAdapter extends RecyclerView.Adapter<PeopleAdapter.PeopleViewHolder> {
 
@@ -35,7 +39,7 @@ public class PeopleAdapter extends RecyclerView.Adapter<PeopleAdapter.PeopleView
     @Override
     public void onBindViewHolder(@NonNull PeopleViewHolder peopleViewHolder, int i) {
         Person p = people.get(i);
-        Glide.with(context).load(p.getProfilePath()).into(peopleViewHolder.image);
+        Glide.with(context).load(Constants.BACKEND.TMDB_POSTER_BASE_URL + p.getProfilePath()).into(peopleViewHolder.image);
         peopleViewHolder.name.setText(p.getName());
         peopleViewHolder.popularity.setText(String.valueOf(p.getPopularity()));
     }
@@ -45,19 +49,30 @@ public class PeopleAdapter extends RecyclerView.Adapter<PeopleAdapter.PeopleView
         return people.size();
     }
 
+    public void setPeople(List<Person> people) {
+        this.people = people;
+        notifyDataSetChanged();
+    }
+
+    public void appendPeople(List<Person> people) {
+        this.people.addAll(people);
+        notifyDataSetChanged();
+    }
+
     static class PeopleViewHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.person_image)
         ImageView image;
+        @BindView(R.id.person_name)
         TextView name;
+        @BindView(R.id.person_popularity)
         TextView popularity;
+        @BindView(R.id.person_adult)
         TextView adult;
 
         public PeopleViewHolder(@NonNull View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.person_image);
-            name = itemView.findViewById(R.id.person_name);
-            popularity = itemView.findViewById(R.id.person_popularity);
-            adult = itemView.findViewById(R.id.person_adult);
+            ButterKnife.bind(this, itemView);
         }
     }
 

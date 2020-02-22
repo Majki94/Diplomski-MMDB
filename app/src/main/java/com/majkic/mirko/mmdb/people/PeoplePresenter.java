@@ -31,4 +31,16 @@ public class PeoplePresenter implements PeopleContract.UserActionsListener {
             }
         });
     }
+
+    @Override
+    public void getNextPeople() {
+        view.showProgress();
+        repository.getNextPeople(new PeopleDataRepository.GetPeopleCallback() {
+            @Override
+            public void onPeopleGot(List<Person> people) {
+                view.appendPeople(people);
+                view.hideProgress();
+            }
+        });
+    }
 }

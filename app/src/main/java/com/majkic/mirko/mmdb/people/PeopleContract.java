@@ -16,10 +16,14 @@ public interface PeopleContract {
         void hideProgress();
 
         void showPeople(List<Person> people);
+
+        void appendPeople(List<Person> people);
     }
 
     interface UserActionsListener {
         void getPeople();
+
+        void getNextPeople();
     }
 
 }
