@@ -41,7 +41,9 @@ public class PeopleDataRepositoryImplementation implements PeopleDataRepository 
                 Communicator.getPopularPeople(page, new Communicator.GetPeopleCallback() {
                     @Override
                     public void onPeopleGot(List<Person> people) {
+                        cachedPeople.addAll(people);
                         callback.onPeopleGot(people);
+                        page++;
                     }
                 });
             }
