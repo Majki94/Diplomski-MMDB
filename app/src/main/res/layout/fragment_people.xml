@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     tools:context="com.majkic.mirko.mmdb.people.PeopleFragment">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/people_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="PEOPLE"/>
+        tools:listitem="@layout/people_list_item"/>
 
 </FrameLayout>
