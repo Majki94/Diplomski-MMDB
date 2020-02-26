@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.majkic.mirko.mmdb.BackStack;
 import com.majkic.mirko.mmdb.Constants;
@@ -33,6 +34,8 @@ public class WatchedMoviesFragment extends Fragment implements WatchedMoviesCont
     RecyclerView movieListView;
     @BindView(R.id.progress)
     ProgressBar progress;
+    @BindView(R.id.no_added)
+    TextView noAdded;
     private GridLayoutManager layoutManager;
 
     public WatchedMoviesFragment() {
@@ -120,12 +123,19 @@ public class WatchedMoviesFragment extends Fragment implements WatchedMoviesCont
 
     @Override
     public void setWatchedMovies(List<Movie> movies) {
-        if (movieListView != null && movieListView.getAdapter() != null) {
-            ((MovieAdapter) movieListView.getAdapter()).setMovieList(movies);
+        if (movieListView != null && movieListView.getAdapter() != null && noAdded != null) {
+            if (movies.size() > 0) {
+                noAdded.setVisibility(View.GONE);
+                movieListView.setVisibility(View.VISIBLE);
+                ((MovieAdapter) movieListView.getAdapter()).setMovieList(movies);
+            } else {
+                movieListView.setVisibility(View.GONE);
+                noAdded.setVisibility(View.VISIBLE);
+            }
         }
     }
 
-    public void refresh(){
+    public void refresh() {
         mPresenter.getWatchedMovies();
     }
 }

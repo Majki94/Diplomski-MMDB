@@ -4,4 +4,6 @@
     <string name="popular">POPULAR</string>
     <string name="favourite">FAVOURITE</string>
     <string name="watched">WATCHED</string>
+    <string name="please_check_your_internet_connection">Please check your internet connection</string>
+    <string name="no_movies_added_to_this_list">No movies added to this list</string>
 </resources>

@@ -2,6 +2,8 @@ package com.majkic.mirko.mmdb.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by hp on 08.01.2020.
  */
@@ -18,16 +20,22 @@ public class Person {
     private boolean adult;
     @SerializedName("profile_path")
     private String profilePath;
+    @SerializedName("known_for_department")
+    private String knownForDepartment;
+    @SerializedName("known_for")
+    private List<Movie> knownFor;
 
     public Person() {
     }
 
-    public Person(int id, String name, float popularity, boolean adult, String profilePath) {
+    public Person(int id, String name, float popularity, boolean adult, String profilePath, String knownForDepartment, List<Movie> knownFor) {
         this.id = id;
         this.name = name;
         this.popularity = popularity;
         this.adult = adult;
         this.profilePath = profilePath;
+        this.knownForDepartment = knownForDepartment;
+        this.knownFor = knownFor;
     }
 
     public int getId() {
@@ -70,4 +78,19 @@ public class Person {
         this.profilePath = profilePath;
     }
 
+    public String getKnownForDepartment() {
+        return knownForDepartment;
+    }
+
+    public void setKnownForDepartment(String knownForDepartment) {
+        this.knownForDepartment = knownForDepartment;
+    }
+
+    public List<Movie> getKnownFor() {
+        return knownFor;
+    }
+
+    public void setKnownFor(List<Movie> knownFor) {
+        this.knownFor = knownFor;
+    }
 }
