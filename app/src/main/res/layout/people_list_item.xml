@@ -47,7 +47,17 @@
                 android:gravity="left|center"
                 android:maxLines="2"
                 android:minLines="2"
-                tools:text="name" />
+                tools:text="popularity" />
+
+            <TextView
+                android:id="@+id/person_known_for_department"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="left|center"
+                android:maxLines="2"
+                android:minLines="2"
+                tools:text="department" />
 
             <TextView
                 android:id="@+id/person_adult"
@@ -57,7 +67,7 @@
                 android:gravity="left|center"
                 android:maxLines="2"
                 android:minLines="2"
-                tools:text="name" />
+                tools:text="adult" />
 
         </LinearLayout>
 

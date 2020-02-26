@@ -42,6 +42,7 @@ public class PeopleAdapter extends RecyclerView.Adapter<PeopleAdapter.PeopleView
         Glide.with(context).load(Constants.BACKEND.TMDB_POSTER_BASE_URL + p.getProfilePath()).into(peopleViewHolder.image);
         peopleViewHolder.name.setText(p.getName());
         peopleViewHolder.popularity.setText(String.valueOf(p.getPopularity()));
+        peopleViewHolder.department.setText(p.getKnownForDepartment());
     }
 
     @Override
@@ -69,6 +70,8 @@ public class PeopleAdapter extends RecyclerView.Adapter<PeopleAdapter.PeopleView
         TextView popularity;
         @BindView(R.id.person_adult)
         TextView adult;
+        @BindView(R.id.person_known_for_department)
+        TextView department;
 
         public PeopleViewHolder(@NonNull View itemView) {
             super(itemView);

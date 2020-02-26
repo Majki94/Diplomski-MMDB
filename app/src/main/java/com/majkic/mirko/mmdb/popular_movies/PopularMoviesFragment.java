@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.majkic.mirko.mmdb.BackStack;
 import com.majkic.mirko.mmdb.Constants;
@@ -37,6 +38,8 @@ public class PopularMoviesFragment extends Fragment implements PopularMoviesCont
     RecyclerView movieListView;
     @BindView(R.id.progress)
     ProgressBar progress;
+    @BindView(R.id.please_check)
+    TextView pleaseCheck;
     private Unbinder unbinder;
 
     public PopularMoviesFragment() {
@@ -145,8 +148,15 @@ public class PopularMoviesFragment extends Fragment implements PopularMoviesCont
 
     @Override
     public void showMovies(List<Movie> movies) {
-        if (movieListView.getAdapter() != null) {
-            ((MovieAdapter) movieListView.getAdapter()).setMovieList(movies);
+        if (movieListView != null && movieListView.getAdapter() != null && pleaseCheck != null) {
+            if (movies.size() > 0) {
+                pleaseCheck.setVisibility(View.GONE);
+                movieListView.setVisibility(View.VISIBLE);
+                ((MovieAdapter) movieListView.getAdapter()).setMovieList(movies);
+            } else {
+                movieListView.setVisibility(View.GONE);
+                pleaseCheck.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -157,7 +167,7 @@ public class PopularMoviesFragment extends Fragment implements PopularMoviesCont
         }
     }
 
-    public void refresh(){
+    public void refresh() {
         mPresenter.syncFavouriteAndWatched();
     }
 
