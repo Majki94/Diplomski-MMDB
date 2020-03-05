@@ -9,12 +9,16 @@ public interface SearchDataRepository {
 
     void startSearch(String term, SearchCallback callback);
 
-    void saveSearch(Search search);
+    void saveSearch(Search search, SaveSearchCallback callback);
 
     void getRecentSearches(RecentSearchesCallback callback);
 
     interface SearchCallback {
         void onSearchResultsGot(List<Movie> foundMovies);
+    }
+
+    interface SaveSearchCallback {
+        void onSearchSaved();
     }
 
     interface RecentSearchesCallback {

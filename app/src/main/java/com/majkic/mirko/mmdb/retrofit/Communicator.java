@@ -5,6 +5,7 @@ import android.util.Log;
 import com.majkic.mirko.mmdb.Constants;
 import com.majkic.mirko.mmdb.model.Movie;
 import com.majkic.mirko.mmdb.model.Person;
+import com.majkic.mirko.mmdb.model.SearchResponse;
 import com.majkic.mirko.mmdb.model.responses.MovieResponse;
 import com.majkic.mirko.mmdb.model.responses.PeopleResponse;
 
@@ -61,7 +62,7 @@ public class Communicator {
         });
     }
 
-    public static void getPopularPeople(int page, final GetPeopleCallback callback){
+    public static void getPopularPeople(int page, final GetPeopleCallback callback) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
@@ -93,12 +94,46 @@ public class Communicator {
         });
     }
 
+    public static void searchMoviesForTitle(int page, String title, final SearchCallBack callBack) {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.BACKEND.TMDB_BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Api api = retrofit.create(Api.class);
+        Call<SearchResponse> call = api.searchMoviesFor(page, title);
+        call.enqueue(new Callback<SearchResponse>() {
+            @Override
+            public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+                if (response.body() != null && response.body().getResults() != null) {
+                    callBack.onSearchFinished(response.body().getResults());
+                } else {
+                    callBack.onSearchFinished(new ArrayList<Movie>());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SearchResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
     public interface GetMoviesCallback {
         void onMoviesGot(List<Movie> movies);
     }
 
-    public interface GetPeopleCallback{
+    public interface GetPeopleCallback {
         void onPeopleGot(List<Person> people);
+    }
+
+    public interface SearchCallBack {
+        void onSearchFinished(List<Movie> searchResults);
     }
 
 }

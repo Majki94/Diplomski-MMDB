@@ -1,6 +1,7 @@
 package com.majkic.mirko.mmdb.retrofit;
 
 import com.majkic.mirko.mmdb.Constants;
+import com.majkic.mirko.mmdb.model.SearchResponse;
 import com.majkic.mirko.mmdb.model.responses.MovieResponse;
 import com.majkic.mirko.mmdb.model.responses.PeopleResponse;
 
@@ -19,5 +20,8 @@ public interface Api {
 
     @GET("person/popular?sort_by=popularity.desc&api_key=" + Constants.BACKEND.TMDB_API_KEY)
     Call<PeopleResponse> popularPeople(@Query("page") int page);
+
+    @GET("search/movie?api_key=" + Constants.BACKEND.TMDB_API_KEY)
+    Call<SearchResponse> searchMoviesFor(@Query("page") int page, @Query("query") String movieTitle);
 
 }
