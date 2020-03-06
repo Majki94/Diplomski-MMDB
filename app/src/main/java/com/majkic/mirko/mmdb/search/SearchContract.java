@@ -8,6 +8,10 @@ import java.util.List;
 public interface SearchContract {
 
     interface View {
+        void showProgress();
+
+        void hideProgress();
+
         void showRecentSearches(List<Search> searchList);
 
         void showSearchResults(List<Movie> searchResults);

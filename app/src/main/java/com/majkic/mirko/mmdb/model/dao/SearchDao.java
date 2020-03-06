@@ -12,7 +12,7 @@ import java.util.List;
 
 @Dao
 public interface SearchDao {
-    @Query("SELECT * FROM search")
+    @Query("SELECT * FROM search ORDER BY search_time DESC")
     List<Search> getAll();
 
     @Insert

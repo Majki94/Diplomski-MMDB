@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity
 public class Search {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     int id;
     @ColumnInfo(name = "search_term")
@@ -18,6 +18,14 @@ public class Search {
     public Search(String searchTerm, long searchTime) {
         this.searchTerm = searchTerm;
         this.searchTime = searchTime;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getSearchTerm() {

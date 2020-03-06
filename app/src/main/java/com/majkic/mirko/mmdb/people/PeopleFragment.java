@@ -54,6 +54,7 @@ public class PeopleFragment extends Fragment implements PeopleContract.View {
 //        }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
