@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 
 import com.majkic.mirko.mmdb.main.MainFragment;
 import com.majkic.mirko.mmdb.people.PeopleFragment;
+import com.majkic.mirko.mmdb.search.SearchFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,10 +20,13 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final int NONE_SELECTED = -1;
     public static final int MOVIES_SELECTED = 0;
-    public static final int PEOPLE_SELECTED = 1;
+    public static final int SEARCH_SELECTED = 1;
+    public static final int PEOPLE_SELECTED = 2;
 
     @BindView(R.id.movies_button)
     LinearLayout moviesButton;
+    @BindView(R.id.search_button)
+    LinearLayout searchButton;
     @BindView(R.id.people_button)
     LinearLayout peopleButton;
 
@@ -40,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
         if (selection == NONE_SELECTED || selection == MOVIES_SELECTED) {
             BackStack.presentFragment(MainFragment.newInstance());
             setSelection(MOVIES_SELECTED);
+        } else if (selection == SEARCH_SELECTED) {
+            BackStack.presentFragment(SearchFragment.newInstance());
+            setSelection(SEARCH_SELECTED);
         } else {
             BackStack.presentFragment(PeopleFragment.newInstance());
             setSelection(PEOPLE_SELECTED);
@@ -51,6 +58,16 @@ public class MainActivity extends AppCompatActivity {
                 if (selection != MOVIES_SELECTED) {
                     setSelection(MOVIES_SELECTED);
                     BackStack.clearToHomeAndPresent();
+                }
+            }
+        });
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selection != SEARCH_SELECTED) {
+                    setSelection(SEARCH_SELECTED);
+                    BackStack.presentFragment(SearchFragment.newInstance());
                 }
             }
         });
@@ -75,12 +92,16 @@ public class MainActivity extends AppCompatActivity {
     public void setSelection(int selection) {
         this.selection = selection;
         moviesButton.setBackgroundColor(Color.TRANSPARENT);
+        searchButton.setBackgroundColor(Color.TRANSPARENT);
         peopleButton.setBackgroundColor(Color.TRANSPARENT);
         switch (selection) {
-            case 0:
+            case MOVIES_SELECTED:
                 moviesButton.setBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteTransparentSelector));
                 break;
-            case 1:
+            case SEARCH_SELECTED:
+                searchButton.setBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteTransparentSelector));
+                break;
+            case PEOPLE_SELECTED:
                 peopleButton.setBackgroundColor(ContextCompat.getColor(this, R.color.colorWhiteTransparentSelector));
                 break;
         }

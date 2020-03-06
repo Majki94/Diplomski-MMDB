@@ -8,7 +8,7 @@ import android.content.Context;
 import com.majkic.mirko.mmdb.model.Search;
 import com.majkic.mirko.mmdb.model.dao.SearchDao;
 
-@Database(entities = {Search.class}, version = 1)
+@Database(entities = {Search.class}, version = 1, exportSchema = false)
 public abstract class RecentSearchesDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "recent_searches_database";

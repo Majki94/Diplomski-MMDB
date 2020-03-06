@@ -11,7 +11,7 @@ import com.majkic.mirko.mmdb.model.dao.MovieDao;
 /**
  * Created by hp on 21.10.2019.
  */
-@Database(entities = {Movie.class}, version = 1)
+@Database(entities = {Movie.class}, version = 1, exportSchema = false)
 public abstract class MoviesDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "movies_database";
