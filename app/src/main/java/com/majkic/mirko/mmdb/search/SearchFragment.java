@@ -5,15 +5,20 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.majkic.mirko.mmdb.R;
+import com.majkic.mirko.mmdb.Utilities;
 import com.majkic.mirko.mmdb.adapters.MovieAdapter;
 import com.majkic.mirko.mmdb.adapters.RecentSearchesAdapter;
 import com.majkic.mirko.mmdb.model.Movie;
@@ -32,6 +37,8 @@ public class SearchFragment extends Fragment implements SearchContract.View {
     private SearchContract.UserActionsListener mPresenter;
     private Unbinder unbinder;
 
+    @BindView(R.id.search_parent)
+    LinearLayout searchParent;
     @BindView(R.id.search_edit_text)
     EditText search;
     @BindView(R.id.search_button)
@@ -75,8 +82,10 @@ public class SearchFragment extends Fragment implements SearchContract.View {
         recentSearchesList.setLayoutManager(new LinearLayoutManager(getContext()));
         recentSearchesList.setAdapter(new RecentSearchesAdapter(getContext(), new ArrayList<Search>(), new RecentSearchesAdapter.ItemClickedListener() {
             @Override
-            public void onSearchClicked(Search search) {
-                mPresenter.startSearch(search.getSearchTerm());
+            public void onSearchClicked(Search searchInRecent) {
+                search.setText(searchInRecent.getSearchTerm());
+                clearFocusAndHideKeyboard(search);
+                mPresenter.startSearch(searchInRecent.getSearchTerm());
             }
         }));
 
@@ -97,6 +106,33 @@ public class SearchFragment extends Fragment implements SearchContract.View {
 
             }
         }));
+
+        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    clearFocusAndHideKeyboard(search);
+                    search();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (searchResultsList != null && recentSearchesList != null) {
+                    if (b) {
+                        searchResultsList.setVisibility(View.GONE);
+                        recentSearchesList.setVisibility(View.VISIBLE);
+                    } else {
+                        recentSearchesList.setVisibility(View.GONE);
+                        searchResultsList.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
 
         return root;
     }
@@ -163,6 +199,16 @@ public class SearchFragment extends Fragment implements SearchContract.View {
             Toast.makeText(getContext(), "Please input text to search", Toast.LENGTH_SHORT).show();
             return;
         }
+        clearFocusAndHideKeyboard(search);
         mPresenter.startSearch(termToSearch);
     }
+
+    private void clearFocusAndHideKeyboard(View view) {
+        if (view != null) {
+            view.clearFocus();
+            searchParent.requestFocus();
+            Utilities.hideKeyboard(view);
+        }
+    }
+
 }

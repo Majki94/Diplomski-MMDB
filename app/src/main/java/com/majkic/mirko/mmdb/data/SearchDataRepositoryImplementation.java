@@ -3,7 +3,6 @@ package com.majkic.mirko.mmdb.data;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.majkic.mirko.mmdb.database.RecentSearchesDatabase;
 import com.majkic.mirko.mmdb.model.Movie;
@@ -78,10 +77,6 @@ public class SearchDataRepositoryImplementation implements SearchDataRepository 
             @Override
             public void run() {
                 final List<Search> searchList = searchesDb.searchDao().getAll();
-                Log.e(TAG, "run: getting searches, size " + searchList.size());
-                for (Search s : searchList) {
-                    Log.e(TAG, "run: term : " + s.getSearchTerm());
-                }
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
