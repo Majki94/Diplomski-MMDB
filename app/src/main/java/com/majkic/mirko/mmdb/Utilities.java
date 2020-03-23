@@ -2,6 +2,8 @@ package com.majkic.mirko.mmdb;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
 /**
@@ -15,6 +17,13 @@ public class Utilities {
             imageView.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent));
         } else {
             imageView.clearColorFilter();
+        }
+    }
+
+    public static void hideKeyboard(View view) {
+        if (view != null && view.getContext() != null) {
+            InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 
