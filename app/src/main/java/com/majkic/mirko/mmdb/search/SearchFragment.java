@@ -17,12 +17,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.majkic.mirko.mmdb.BackStack;
 import com.majkic.mirko.mmdb.R;
 import com.majkic.mirko.mmdb.Utilities;
 import com.majkic.mirko.mmdb.adapters.MovieAdapter;
 import com.majkic.mirko.mmdb.adapters.RecentSearchesAdapter;
 import com.majkic.mirko.mmdb.model.Movie;
 import com.majkic.mirko.mmdb.model.Search;
+import com.majkic.mirko.mmdb.movie_details.MovieDetailsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +95,7 @@ public class SearchFragment extends Fragment implements SearchContract.View {
         searchResultsList.setAdapter(new MovieAdapter(getContext(), new ArrayList<Movie>(), new MovieAdapter.MovieClickListener() {
             @Override
             public void onMovieClicked(Movie m) {
-
+                BackStack.presentFragment(MovieDetailsFragment.newInstance(m.getId()));
             }
 
             @Override

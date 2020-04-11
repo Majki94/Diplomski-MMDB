@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.majkic.mirko.mmdb.BackStack;
 import com.majkic.mirko.mmdb.Constants;
 import com.majkic.mirko.mmdb.R;
 import com.majkic.mirko.mmdb.Utilities;
@@ -44,6 +45,8 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     ImageView watched;
     @BindView(R.id.progress)
     ProgressBar progressBar;
+    @BindView(R.id.back)
+    ImageView back;
 
     private MovieDetailsContract.UserActionsListener mPresenter;
     private Movie movie;
@@ -170,5 +173,10 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
             Utilities.setFavoriteOrWatched(getContext(), watched, movie.isWatched());
             mPresenter.watchedChanged(movie);
         }
+    }
+
+    @OnClick(R.id.back)
+    public void backClicked() {
+        BackStack.onBackPressed();
     }
 }
