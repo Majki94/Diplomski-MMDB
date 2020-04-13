@@ -95,7 +95,7 @@ public class SearchFragment extends Fragment implements SearchContract.View {
         searchResultsList.setAdapter(new MovieAdapter(getContext(), new ArrayList<Movie>(), new MovieAdapter.MovieClickListener() {
             @Override
             public void onMovieClicked(Movie m) {
-                BackStack.presentFragment(MovieDetailsFragment.newInstance(m.getId()));
+                BackStack.presentFragment(MovieDetailsFragment.newInstance(m.getId(), true));
             }
 
             @Override

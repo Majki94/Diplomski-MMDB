@@ -13,6 +13,8 @@ public interface SearchDataRepository {
 
     void getRecentSearches(RecentSearchesCallback callback);
 
+    List<Movie> getCache();
+
     interface SearchCallback {
         void onSearchResultsGot(List<Movie> foundMovies);
     }

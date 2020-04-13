@@ -46,6 +46,7 @@ public class SearchDataRepositoryImplementation implements SearchDataRepository 
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
+                                cache = searchResults;
                                 callback.onSearchResultsGot(searchResults);
                             }
                         });
@@ -85,5 +86,10 @@ public class SearchDataRepositoryImplementation implements SearchDataRepository 
                 });
             }
         }).start();
+    }
+
+    @Override
+    public List<Movie> getCache() {
+        return cache;
     }
 }
