@@ -19,7 +19,7 @@ public interface MovieDetailsContract {
     }
 
     interface UserActionsListener {
-        void getMovieForID(int id);
+        void getMovieForID(int id, boolean loadSearch);
 
         void favouriteChanged(Movie movie);
 

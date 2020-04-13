@@ -27,8 +27,10 @@ import butterknife.Unbinder;
 public class MovieDetailsFragment extends Fragment implements MovieDetailsContract.View {
 
     private static final String ARG_MOVIE_ID = "movie_id";
+    private static final String ARG_LOAD_SEARCH = "load_search";
 
     private int movieId;
+    private boolean loadSearch;
     private Unbinder unbinder;
 
     @BindView(R.id.title)
@@ -59,6 +61,16 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         MovieDetailsFragment fragment = new MovieDetailsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_MOVIE_ID, movieId);
+        args.putBoolean(ARG_LOAD_SEARCH, false);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static MovieDetailsFragment newInstance(int movieId, boolean loadSearch) {
+        MovieDetailsFragment fragment = new MovieDetailsFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_MOVIE_ID, movieId);
+        args.putBoolean(ARG_LOAD_SEARCH, loadSearch);
         fragment.setArguments(args);
         return fragment;
     }
@@ -74,6 +86,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             movieId = getArguments().getInt(ARG_MOVIE_ID);
+            loadSearch = getArguments().getBoolean(ARG_LOAD_SEARCH);
         }
     }
 
@@ -92,7 +105,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.getMovieForID(movieId);
+        mPresenter.getMovieForID(movieId, loadSearch);
     }
 
     @Override
