@@ -15,7 +15,7 @@ import com.majkic.mirko.mmdb.R;
 import com.majkic.mirko.mmdb.databinding.FragmentMainBinding;
 import com.majkic.mirko.mmdb.ui.adapters.MainPagerAdapter;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements MainContract.View {
 
     private static final String TAG = MainFragment.class.getSimpleName();
 
