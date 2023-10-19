@@ -1,10 +1,10 @@
 package com.majkic.mirko.mmdb;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.majkic.mirko.mmdb.main.MainFragment;
+import com.majkic.mirko.mmdb.ui.main.MainFragment;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

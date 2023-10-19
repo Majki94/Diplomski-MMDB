@@ -2,9 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.majkic.mirko.mmdb.people.PeopleFragment">
+    tools:context="com.majkic.mirko.mmdb.ui.people.PeopleFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/people_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
