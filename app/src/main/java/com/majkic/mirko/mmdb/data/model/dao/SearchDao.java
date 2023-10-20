@@ -16,11 +16,11 @@ public interface SearchDao {
     List<Search> getAll();
 
     @Insert
-    void insert(Search... movies);
+    void insert(Search... searches);
 
     @Update
-    void update(Search... movies);
+    void update(Search... searches);
 
     @Delete
-    void delete(Search movie);
+    void delete(Search search);
 }
