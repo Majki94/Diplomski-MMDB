@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.majkic.mirko.mmdb.ui.main.MainFragment;
+import com.majkic.mirko.mmdb.ui.mvp.main.MainFragment;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

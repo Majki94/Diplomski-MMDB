@@ -1,25 +1,25 @@
-package com.majkic.mirko.mmdb.ui.movie_details;
+package com.majkic.mirko.mmdb.ui.mvp.favourite_movies;
 
 import com.majkic.mirko.mmdb.data.model.Movie;
 
+import java.util.List;
+
 /**
- * Created by hp on 07.11.2019.
+ * Created by hp on 09.12.2019.
  */
 
-public interface MovieDetailsContract {
+public interface FavouriteMoviesContract {
 
     interface View {
         void showProgress();
 
         void hideProgress();
 
-        void showMovie(Movie movie);
-
-        void showUnableToRetrieveInfo();
+        void setFavouriteMovies(List<Movie> movies);
     }
 
     interface UserActionsListener {
-        void getMovieForID(int id, boolean loadSearch);
+        void getFavouriteMovies();
 
         void favouriteChanged(Movie movie);
 

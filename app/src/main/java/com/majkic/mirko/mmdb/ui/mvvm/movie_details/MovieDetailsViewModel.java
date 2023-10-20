@@ -1,12 +1,14 @@
-package com.majkic.mirko.mmdb.ui.movie_details;
+package com.majkic.mirko.mmdb.ui.mvvm.movie_details;
 
-import android.content.Context;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
+import com.majkic.mirko.mmdb.MMDBApplication;
+import com.majkic.mirko.mmdb.data.model.Movie;
 import com.majkic.mirko.mmdb.data.repository.MovieDataRepository;
 import com.majkic.mirko.mmdb.data.repository.MovieDataRepositoryImplementation;
 import com.majkic.mirko.mmdb.data.repository.SearchDataRepository;
 import com.majkic.mirko.mmdb.data.repository.SearchDataRepositoryImplementation;
-import com.majkic.mirko.mmdb.data.model.Movie;
 
 import java.util.List;
 
@@ -14,23 +16,16 @@ import java.util.List;
  * Created by hp on 07.11.2019.
  */
 
-public class MovieDetailsPresenter implements MovieDetailsContract.UserActionsListener {
+public class MovieDetailsViewModel extends ViewModel {
 
-    private Context context;
-    private MovieDetailsContract.View view;
-    private MovieDataRepository movieDataRepository;
-    private SearchDataRepository searchDataRepository;
+    private MovieDataRepository movieDataRepository = MovieDataRepositoryImplementation.getInstance(MMDBApplication.getContext());
+    private SearchDataRepository searchDataRepository = SearchDataRepositoryImplementation.getInstance(MMDBApplication.getContext());
+    MutableLiveData<Boolean> showProgress = new MutableLiveData<>(false);
+    MutableLiveData<Boolean> errorOccurred = new MutableLiveData<>(false);
+    MutableLiveData<Movie> movie = new MutableLiveData<>(null);
 
-    public MovieDetailsPresenter(Context context, MovieDetailsContract.View view) {
-        this.context = context;
-        this.view = view;
-        this.movieDataRepository = MovieDataRepositoryImplementation.getInstance(context);
-        this.searchDataRepository = SearchDataRepositoryImplementation.getInstance(context);
-    }
-
-    @Override
     public void getMovieForID(final int id, boolean loadSearch) {
-        view.showProgress();
+        showProgress.setValue(true);
         if (!loadSearch) {
             movieDataRepository.getCachedMovies(new MovieDataRepository.GetMoviesCallback() {
                 @Override
@@ -47,16 +42,16 @@ public class MovieDetailsPresenter implements MovieDetailsContract.UserActionsLi
                             @Override
                             public void onMovieGot(Movie m) {
                                 if (m != null) {
-                                    view.hideProgress();
-                                    view.showMovie(m);
+                                    showProgress.setValue(false);
+                                    movie.setValue(m);
                                 } else {
-
+                                    errorOccurred.setValue(true);
                                 }
                             }
                         });
                     } else {
-                        view.hideProgress();
-                        view.showMovie(retMovie);
+                        showProgress.setValue(false);
+                        movie.setValue(retMovie);
                     }
                 }
             });
@@ -69,30 +64,29 @@ public class MovieDetailsPresenter implements MovieDetailsContract.UserActionsLi
                     break;
                 }
             }
-            view.hideProgress();
-            view.showMovie(retMovie);
+            showProgress.setValue(false);
+            movie.setValue(retMovie);
         }
     }
 
-    @Override
     public void favouriteChanged(Movie movie) {
-        view.showProgress();
+        showProgress.setValue(true);
         movieDataRepository.saveMovie(movie, new MovieDataRepository.SaveMovieCallback() {
             @Override
             public void onMovieSaved() {
-                view.hideProgress();
+                showProgress.setValue(false);
             }
         });
     }
 
-    @Override
     public void watchedChanged(Movie movie) {
-        view.showProgress();
+        showProgress.setValue(true);
         movieDataRepository.saveMovie(movie, new MovieDataRepository.SaveMovieCallback() {
             @Override
             public void onMovieSaved() {
-                view.hideProgress();
+                showProgress.setValue(false);
             }
         });
     }
+
 }

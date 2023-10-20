@@ -1,4 +1,4 @@
-package com.majkic.mirko.mmdb.ui.favourite_movies;
+package com.majkic.mirko.mmdb.ui.mvp.favourite_movies;
 
 import android.content.Context;
 

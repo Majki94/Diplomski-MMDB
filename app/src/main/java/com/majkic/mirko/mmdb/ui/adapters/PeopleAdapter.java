@@ -52,11 +52,6 @@ public class PeopleAdapter extends RecyclerView.Adapter<PeopleAdapter.PeopleView
         notifyDataSetChanged();
     }
 
-    public void appendPeople(List<Person> people) {
-        this.people.addAll(people);
-        notifyDataSetChanged();
-    }
-
     static class PeopleViewHolder extends RecyclerView.ViewHolder {
 
         ImageView image;

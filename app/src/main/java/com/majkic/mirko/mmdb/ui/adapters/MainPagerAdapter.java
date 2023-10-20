@@ -6,9 +6,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.majkic.mirko.mmdb.ui.favourite_movies.FavouriteMoviesFragment;
-import com.majkic.mirko.mmdb.ui.popular_movies.PopularMoviesFragment;
-import com.majkic.mirko.mmdb.ui.watched_movies.WatchedMoviesFragment;
+import com.majkic.mirko.mmdb.ui.mvp.favourite_movies.FavouriteMoviesFragment;
+import com.majkic.mirko.mmdb.ui.mvp.popular_movies.PopularMoviesFragment;
+import com.majkic.mirko.mmdb.ui.mvp.watched_movies.WatchedMoviesFragment;
 
 /**
  * Created by hp on 01.12.2019.

@@ -1,6 +1,5 @@
-package com.majkic.mirko.mmdb.ui.people;
+package com.majkic.mirko.mmdb.ui.mvvm.people;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,11 +18,11 @@ import com.majkic.mirko.mmdb.ui.adapters.PeopleAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PeopleFragment extends Fragment implements PeopleContract.View {
+public class PeopleFragment extends Fragment {
 
     private static final String TAG = PeopleFragment.class.getSimpleName();
     private FragmentPeopleBinding binding;
-    private PeopleContract.UserActionsListener mPresenter;
+    private PeopleViewModel viewModel;
 
     public PeopleFragment() {
         // Required empty public constructor
@@ -31,19 +31,8 @@ public class PeopleFragment extends Fragment implements PeopleContract.View {
     public static PeopleFragment newInstance() {
         PeopleFragment fragment = new PeopleFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
     }
 
     @SuppressWarnings("unchecked")
@@ -52,7 +41,7 @@ public class PeopleFragment extends Fragment implements PeopleContract.View {
         // Inflate the layout for this fragment
         binding = FragmentPeopleBinding.inflate(inflater, container, false);
 
-        mPresenter = new PeoplePresenter(this);
+        viewModel = new ViewModelProvider(this).get(PeopleViewModel.class);
 
         binding.peopleList.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.peopleList.setAdapter(new PeopleAdapter(getContext(), new ArrayList()));
@@ -63,29 +52,28 @@ public class PeopleFragment extends Fragment implements PeopleContract.View {
                 if (binding.peopleList.getLayoutManager() != null) {
                     LinearLayoutManager layoutManager = ((LinearLayoutManager) binding.peopleList.getLayoutManager());
                     if (layoutManager.findLastVisibleItemPosition() == layoutManager.getItemCount() - 1 && binding.progress.getVisibility() == View.GONE) {
-                        mPresenter.getNextPeople();
+                        viewModel.getNextPeople();
                     }
                 }
             }
         });
 
+        viewModel.showProgress.observe(getViewLifecycleOwner(), shouldShowProgress -> {
+            if (shouldShowProgress) {
+                showProgress();
+            } else {
+                hideProgress();
+            }
+        });
+
+        viewModel.people.observe(getViewLifecycleOwner(), people ->{
+            hideProgress();
+            showPeople(people);
+        });
+
+        viewModel.getPeople();
+
         return binding.getRoot();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.getPeople();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
     @Override
@@ -94,31 +82,21 @@ public class PeopleFragment extends Fragment implements PeopleContract.View {
         binding = null;
     }
 
-    @Override
     public void showProgress() {
         if (binding != null) {
             binding.progress.setVisibility(View.VISIBLE);
         }
     }
 
-    @Override
     public void hideProgress() {
         if (binding != null) {
             binding.progress.setVisibility(View.GONE);
         }
     }
 
-    @Override
     public void showPeople(List<Person> people) {
         if (binding != null && binding.peopleList.getAdapter() != null) {
             ((PeopleAdapter) binding.peopleList.getAdapter()).setPeople(people);
-        }
-    }
-
-    @Override
-    public void appendPeople(List<Person> people) {
-        if (binding != null && binding.peopleList.getAdapter() != null) {
-            ((PeopleAdapter) binding.peopleList.getAdapter()).appendPeople(people);
         }
     }
 

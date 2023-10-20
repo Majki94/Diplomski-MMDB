@@ -1,17 +1,17 @@
 package com.majkic.mirko.mmdb.data.repository;
 
+import androidx.lifecycle.LiveData;
+
 import com.majkic.mirko.mmdb.data.model.Person;
 
 import java.util.List;
 
 public interface PeopleDataRepository {
 
-    void getCachedPeople(GetPeopleCallback callback);
+    LiveData<List<Person>> getPeople();
 
-    void getNextPeople(GetPeopleCallback callback);
+    void getCachedPeople();
 
-    interface GetPeopleCallback {
-        void onPeopleGot(List<Person> people);
-    }
+    void getNextPeople();
 
 }

@@ -1,4 +1,4 @@
-package com.majkic.mirko.mmdb.ui.main;
+package com.majkic.mirko.mmdb.ui.mvp.main;
 
 import android.content.Context;
 import android.os.Bundle;

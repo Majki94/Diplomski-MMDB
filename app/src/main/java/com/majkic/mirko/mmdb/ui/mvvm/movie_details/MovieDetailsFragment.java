@@ -1,4 +1,4 @@
-package com.majkic.mirko.mmdb.ui.movie_details;
+package com.majkic.mirko.mmdb.ui.mvvm.movie_details;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.majkic.mirko.mmdb.BackStack;
@@ -18,7 +19,7 @@ import com.majkic.mirko.mmdb.Utilities;
 import com.majkic.mirko.mmdb.data.model.Movie;
 import com.majkic.mirko.mmdb.databinding.FragmentMovieDetailsBinding;
 
-public class MovieDetailsFragment extends Fragment implements MovieDetailsContract.View {
+public class MovieDetailsFragment extends Fragment {
 
     private static final String ARG_MOVIE_ID = "movie_id";
     private static final String ARG_LOAD_SEARCH = "load_search";
@@ -26,8 +27,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     private int movieId;
     private boolean loadSearch;
     private FragmentMovieDetailsBinding binding;
-    private MovieDetailsContract.UserActionsListener mPresenter;
-    private Movie movie;
+    private MovieDetailsViewModel viewModel;
 
     public MovieDetailsFragment() {
         // Required empty public constructor
@@ -72,19 +72,35 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         // Inflate the layout for this fragment
         binding = FragmentMovieDetailsBinding.inflate(inflater, container, false);
 
-        mPresenter = new MovieDetailsPresenter(getContext(), this);
+        viewModel = new ViewModelProvider(this).get(MovieDetailsViewModel.class);
 
         binding.back.setOnClickListener(view -> backClicked());
         binding.favourite.setOnClickListener(view -> favouriteClicked());
         binding.watched.setOnClickListener(view -> watchedClicked());
 
-        return binding.getRoot();
-    }
+        viewModel.showProgress.observe(getViewLifecycleOwner(), shouldShowProgress -> {
+            if (shouldShowProgress) {
+                showProgress();
+            } else {
+                hideProgress();
+            }
+        });
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.getMovieForID(movieId, loadSearch);
+        viewModel.movie.observe(getViewLifecycleOwner(), movie -> {
+            if (movie != null) {
+                showMovie(movie);
+            }
+        });
+
+        viewModel.errorOccurred.observe(getViewLifecycleOwner(), errorOccurred -> {
+            if (errorOccurred) {
+                showUnableToRetrieveInfo();
+            }
+        });
+
+        viewModel.getMovieForID(movieId, loadSearch);
+
+        return binding.getRoot();
     }
 
     @Override
@@ -103,26 +119,22 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         binding = null;
     }
 
-    @Override
     public void showProgress() {
         if (binding != null) {
             binding.progress.setVisibility(View.VISIBLE);
         }
     }
 
-    @Override
     public void hideProgress() {
         if (binding != null) {
             binding.progress.setVisibility(View.GONE);
         }
     }
 
-    @Override
     public void showMovie(Movie movie) {
         if (binding == null) {
             return;
         }
-        this.movie = movie;
         Glide.with(this).load(Constants.BACKEND.TMDB_POSTER_BASE_URL + movie.getPosterPath()).into(binding.poster);
         if (getContext() != null) {
             Utilities.setFavoriteOrWatched(getContext(), binding.favourite, movie.isFavorite());
@@ -139,7 +151,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         binding.overview.setText(movie.getOverview());
     }
 
-    @Override
     public void showUnableToRetrieveInfo() {
         if (getContext() != null) {
             Toast.makeText(getContext(), "Unable to retrieve movie info", Toast.LENGTH_SHORT).show();
@@ -147,18 +158,20 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     }
 
     public void favouriteClicked() {
+        Movie movie = viewModel.movie.getValue();
         if (binding != null && movie != null && getContext() != null) {
             movie.setFavorite(!movie.isFavorite());
             Utilities.setFavoriteOrWatched(getContext(), binding.favourite, movie.isFavorite());
-            mPresenter.favouriteChanged(movie);
+            viewModel.favouriteChanged(movie);
         }
     }
 
     public void watchedClicked() {
+        Movie movie = viewModel.movie.getValue();
         if (binding != null && movie != null && getContext() != null) {
             movie.setWatched(!movie.isWatched());
             Utilities.setFavoriteOrWatched(getContext(), binding.watched, movie.isWatched());
-            mPresenter.watchedChanged(movie);
+            viewModel.watchedChanged(movie);
         }
     }
 

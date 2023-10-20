@@ -1,6 +1,5 @@
-package com.majkic.mirko.mmdb.ui.search;
+package com.majkic.mirko.mmdb.ui.mvvm.search;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.majkic.mirko.mmdb.BackStack;
@@ -18,14 +18,14 @@ import com.majkic.mirko.mmdb.data.model.Search;
 import com.majkic.mirko.mmdb.databinding.FragmentSearchBinding;
 import com.majkic.mirko.mmdb.ui.adapters.MovieAdapter;
 import com.majkic.mirko.mmdb.ui.adapters.RecentSearchesAdapter;
-import com.majkic.mirko.mmdb.ui.movie_details.MovieDetailsFragment;
+import com.majkic.mirko.mmdb.ui.mvvm.movie_details.MovieDetailsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchFragment extends Fragment implements SearchContract.View {
+public class SearchFragment extends Fragment {
 
-    private SearchContract.UserActionsListener mPresenter;
+    private SearchViewModel viewModel;
     private FragmentSearchBinding binding;
 
     public SearchFragment() {
@@ -35,39 +35,25 @@ public class SearchFragment extends Fragment implements SearchContract.View {
     public static SearchFragment newInstance() {
         SearchFragment fragment = new SearchFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSearchBinding.inflate(inflater, container, false);
 
-        mPresenter = new SearchPresenter(getContext(), this);
+        viewModel = new ViewModelProvider(this).get(SearchViewModel.class);
 
         binding.recentSearches.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recentSearches.setAdapter(new RecentSearchesAdapter(getContext(), new ArrayList<Search>(), new RecentSearchesAdapter.ItemClickedListener() {
-            @Override
-            public void onSearchClicked(Search searchInRecent) {
-                binding.searchEditText.setText(searchInRecent.getSearchTerm());
-                clearFocusAndHideKeyboard(binding.searchEditText);
-                mPresenter.startSearch(searchInRecent.getSearchTerm());
-            }
+        binding.recentSearches.setAdapter(new RecentSearchesAdapter(getContext(), new ArrayList<>(), searchInRecent -> {
+            binding.searchEditText.setText(searchInRecent.getSearchTerm());
+            clearFocusAndHideKeyboard(binding.searchEditText);
+            viewModel.startSearch(searchInRecent.getSearchTerm());
         }));
 
         binding.searchResults.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.searchResults.setAdapter(new MovieAdapter(getContext(), new ArrayList<Movie>(), new MovieAdapter.MovieClickListener() {
+        binding.searchResults.setAdapter(new MovieAdapter(getContext(), new ArrayList<>(), new MovieAdapter.MovieClickListener() {
             @Override
             public void onMovieClicked(Movie m) {
                 BackStack.presentFragment(MovieDetailsFragment.newInstance(m.getId(), true));
@@ -100,7 +86,7 @@ public class SearchFragment extends Fragment implements SearchContract.View {
             if (b) {
                 binding.searchResults.setVisibility(View.GONE);
                 binding.recentSearches.setVisibility(View.VISIBLE);
-                mPresenter.getRecentSearches();
+                viewModel.getRecentSearches();
             } else {
                 binding.recentSearches.setVisibility(View.GONE);
                 binding.searchResults.setVisibility(View.VISIBLE);
@@ -109,18 +95,19 @@ public class SearchFragment extends Fragment implements SearchContract.View {
 
         binding.searchButton.setOnClickListener(view -> search());
 
+        viewModel.showProgress.observe(getViewLifecycleOwner(), shouldShowProgress -> {
+            if (shouldShowProgress) {
+                showProgress();
+            } else {
+                hideProgress();
+            }
+        });
+
+        viewModel.recentSearches.observe(getViewLifecycleOwner(), this::showRecentSearches);
+
+        viewModel.searchResults.observe(getViewLifecycleOwner(), this::showSearchResults);
+
         return binding.getRoot();
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
     @Override
@@ -129,27 +116,18 @@ public class SearchFragment extends Fragment implements SearchContract.View {
         binding = null;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.getRecentSearches();
-    }
-
-    @Override
     public void showProgress() {
         if (binding != null) {
             binding.progress.setVisibility(View.VISIBLE);
         }
     }
 
-    @Override
     public void hideProgress() {
         if (binding != null) {
             binding.progress.setVisibility(View.GONE);
         }
     }
 
-    @Override
     public void showRecentSearches(List<Search> searchList) {
         if (binding != null && binding.recentSearches.getAdapter() != null) {
             binding.searchResults.setVisibility(View.GONE);
@@ -158,7 +136,6 @@ public class SearchFragment extends Fragment implements SearchContract.View {
         }
     }
 
-    @Override
     public void showSearchResults(List<Movie> searchResults) {
         if (binding != null && binding.searchResults.getAdapter() != null) {
             binding.recentSearches.setVisibility(View.GONE);
@@ -177,7 +154,7 @@ public class SearchFragment extends Fragment implements SearchContract.View {
             return;
         }
         clearFocusAndHideKeyboard(binding.searchEditText);
-        mPresenter.startSearch(termToSearch);
+        viewModel.startSearch(termToSearch);
     }
 
     private void clearFocusAndHideKeyboard(View view) {

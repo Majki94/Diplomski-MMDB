@@ -1,4 +1,4 @@
-package com.majkic.mirko.mmdb.ui.favourite_movies;
+package com.majkic.mirko.mmdb.ui.mvp.favourite_movies;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import com.majkic.mirko.mmdb.Constants;
 import com.majkic.mirko.mmdb.data.model.Movie;
 import com.majkic.mirko.mmdb.databinding.FragmentFavouriteMoviesBinding;
 import com.majkic.mirko.mmdb.ui.adapters.MovieAdapter;
-import com.majkic.mirko.mmdb.ui.movie_details.MovieDetailsFragment;
+import com.majkic.mirko.mmdb.ui.mvvm.movie_details.MovieDetailsFragment;
 
 import java.util.ArrayList;
 import java.util.List;

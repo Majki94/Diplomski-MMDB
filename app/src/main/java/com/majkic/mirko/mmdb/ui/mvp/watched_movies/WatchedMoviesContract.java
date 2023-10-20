@@ -1,4 +1,4 @@
-package com.majkic.mirko.mmdb.ui.favourite_movies;
+package com.majkic.mirko.mmdb.ui.mvp.watched_movies;
 
 import com.majkic.mirko.mmdb.data.model.Movie;
 
@@ -8,18 +8,18 @@ import java.util.List;
  * Created by hp on 09.12.2019.
  */
 
-public interface FavouriteMoviesContract {
+public interface WatchedMoviesContract {
 
     interface View {
         void showProgress();
 
         void hideProgress();
 
-        void setFavouriteMovies(List<Movie> movies);
+        void setWatchedMovies(List<Movie> movies);
     }
 
     interface UserActionsListener {
-        void getFavouriteMovies();
+        void getWatchedMovies();
 
         void favouriteChanged(Movie movie);
 

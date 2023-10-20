@@ -1,4 +1,4 @@
-package com.majkic.mirko.mmdb.ui.popular_movies;
+package com.majkic.mirko.mmdb.ui.mvp.popular_movies;
 
 import com.majkic.mirko.mmdb.data.model.Movie;
 

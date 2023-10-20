@@ -1,4 +1,4 @@
-package com.majkic.mirko.mmdb.ui.watched_movies;
+package com.majkic.mirko.mmdb.ui.mvp.watched_movies;
 
 import android.content.Context;
 

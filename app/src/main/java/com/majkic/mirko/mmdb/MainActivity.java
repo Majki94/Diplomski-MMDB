@@ -7,9 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.majkic.mirko.mmdb.databinding.ActivityMainBinding;
-import com.majkic.mirko.mmdb.ui.main.MainFragment;
-import com.majkic.mirko.mmdb.ui.people.PeopleFragment;
-import com.majkic.mirko.mmdb.ui.search.SearchFragment;
+import com.majkic.mirko.mmdb.ui.mvp.main.MainFragment;
+import com.majkic.mirko.mmdb.ui.mvvm.people.PeopleFragment;
+import com.majkic.mirko.mmdb.ui.mvvm.search.SearchFragment;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    tools:context=".ui.search.SearchFragment">
+    tools:context=".ui.mvvm.search.SearchFragment">
 
     <LinearLayout
         android:id="@+id/search_parent"
