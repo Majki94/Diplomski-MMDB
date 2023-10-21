@@ -107,6 +107,10 @@ public class SearchFragment extends Fragment {
 
         viewModel.searchResults.observe(getViewLifecycleOwner(), this::showSearchResults);
 
+        if (viewModel.searchResults.getValue() != null && viewModel.searchResults.getValue().isEmpty()) {
+            viewModel.getRecentSearches();
+        }
+
         return binding.getRoot();
     }
 
